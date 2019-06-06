@@ -1,8 +1,13 @@
-export const init = canvas => {
+export const init = (canvas, dimensions) => {
     try {
         const gl = canvas.getContext('webgl');
         if (gl) {
+            const { width, height } = dimensions;
+            gl.canvas.width = width;
+            gl.canvas.height = height;
+
             clearCanvas(gl);
+
             console.log('CANVAS::INITIATED');
 
             return gl;
@@ -52,6 +57,18 @@ export const createProgram = (gl, vertexShader, fragmentShader) => {
 
     console.log(gl.getProgramInfoLog(program));
     gl.deleteProgram(program);
+};
+
+export const setUpVertexArrayBuffer = (
+    gl,
+    size,
+    type,
+    offset,
+    stride,
+    normalize,
+    attributeLocation,
+) => {
+    gl.vertexAttribPointer(attributeLocation, size, type, normalize, stride, offset);
 };
 
 export const drawArrays = (gl, primitiveType, offset, count) => {

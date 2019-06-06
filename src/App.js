@@ -7,7 +7,7 @@ import sagas from './sagas';
 import CanvasComponent from './components/CanvasComponent';
 
 const sagaMiddleware = createSagaMiddleware();
-const store = createStore(reducers, applyMiddleware(sagaMiddleware));
+const store = createStore(reducers, applyMiddleware(sagaMiddleware),);
 sagaMiddleware.run(sagas);
 
 function App() {
@@ -19,3 +19,5 @@ function App() {
 }
 
 export default App;
+
+window.store = store;
