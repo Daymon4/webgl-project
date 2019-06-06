@@ -1,7 +1,8 @@
 import { takeEvery, call } from 'redux-saga/effects';
 import * as constants from './constants';
-import * as vShader from './shaders/vertex-shader.txt';
-import * as fShader from './shaders/fragment-shader.txt';
+import * as controlsConstants from '../Controls/constants';
+import * as vShader from './shaders/vertex-shader.glsl';
+import * as fShader from './shaders/fragment-shader.glsl';
 
 import {
     init,
@@ -14,16 +15,16 @@ import {
 let gl = null;
 let colorLocation;
 let positionLocation;
-let rotationLocation;
+// let rotationLocation;
 let resolutionLocation;
-let translationLocation;
+// let translationLocation;
 
 export default function* canvasApi () {
     yield takeEvery(constants.INIT_CANVAS, _onInitCanvas);
-    yield takeEvery(constants.START_PROGRAM, _onStartProgram);
-    yield takeEvery(constants.CHANGE_COLOR, _onDrawColorProgram);
-    yield takeEvery(constants.ROTATE, _onRotate);
-    yield takeEvery(constants.TRANSLATE, _onTranslate);
+    yield takeEvery(controlsConstants.START_PROGRAM, _onStartProgram);
+    yield takeEvery(controlsConstants.CHANGE_COLOR, _onDrawColorProgram);
+    // yield takeEvery(constants.ROTATE, _onRotate);
+    // yield takeEvery(constants.TRANSLATE, _onTranslate);
 };
 
 export function* _onInitCanvas({ payload }) {
@@ -50,9 +51,9 @@ export function* _onStartProgram  () {
     const program = createProgram(gl, vertexShader, fragmentShader);
 
     positionLocation = gl.getAttribLocation(program, 'a_position');
-    translationLocation = gl.getUniformLocation(program, 'u_translation');
+    // translationLocation = gl.getUniformLocation(program, 'u_translation');
     resolutionLocation = gl.getUniformLocation(program, 'u_resolution');
-    rotationLocation = gl.getUniformLocation(program, 'u_rotation');
+    // rotationLocation = gl.getUniformLocation(program, 'u_rotation');
     colorLocation = gl.getUniformLocation(program, 'u_color');
 
     const positionBuffer = gl.createBuffer();
@@ -85,29 +86,29 @@ export function* _onDrawColorProgram({ payload }) {
     yield call(_drawColor, payload);
 }
 
-export function* _onRotate({ payload }) {
-    const radAngle = Math.PI * payload / 180;
-    yield call(_drawRotate, radAngle);
-}
-
-export function* _onTranslate({ payload }) {
-    const translation = [
-        payload.x,
-        payload.y,
-    ];
-    yield call(_drawTranslate, translation);
-}
+// export function* _onRotate({ payload }) {
+//     const radAngle = Math.PI * payload / 180;
+//     yield call(_drawRotate, radAngle);
+// }
+//
+// export function* _onTranslate({ payload }) {
+//     const translation = [
+//         payload.x,
+//         payload.y,
+//     ];
+//     yield call(_drawTranslate, translation);
+// }
 
 export function* _drawInitial() {
     yield call(setUpVertexArrayBuffer, gl, 2, gl.FLOAT, 0, 0, false, positionLocation);
-    const initPosition = [0, 0];
-    const initRotation = [0, 1];
+    // const initPosition = [0, 0];
+    // const initRotation = [0, 1];
     const initColor = [1.0, 0.5, 0.0, 1.0];
 
     gl.uniform4f(colorLocation, ...initColor);
     gl.uniform2f(resolutionLocation, gl.canvas.width, gl.canvas.height);
-    gl.uniform2fv(rotationLocation, initRotation);
-    gl.uniform2fv(translationLocation, initPosition);
+    // gl.uniform2fv(rotationLocation, initRotation);
+    // gl.uniform2fv(translationLocation, initPosition);
     yield call(drawArrays, gl, gl.TRIANGLES, 0, 3);
 }
 
@@ -118,19 +119,19 @@ export function* _drawColor(color) {
     yield call(drawArrays, gl, gl.TRIANGLES, 0, 3);
 }
 
-export function* _drawRotate(angle) {
-    yield call(setUpVertexArrayBuffer, gl, 2, gl.FLOAT, 0, 0, false, positionLocation);
-    const rotation = [Math.sin(angle), Math.cos(angle)];
+// export function* _drawRotate(angle) {
+//     yield call(setUpVertexArrayBuffer, gl, 2, gl.FLOAT, 0, 0, false, positionLocation);
+//     const rotation = [Math.sin(angle), Math.cos(angle)];
+//
+//     gl.uniform2fv(rotationLocation, rotation);
+//     yield call(drawArrays, gl, gl.TRIANGLES, 0, 3);
+// }
 
-    gl.uniform2fv(rotationLocation, rotation);
-    yield call(drawArrays, gl, gl.TRIANGLES, 0, 3);
-}
-
-export function* _drawTranslate(translation) {
-    yield call(setUpVertexArrayBuffer, gl, 2, gl.FLOAT, 0, 0, false, positionLocation);
-    gl.uniform2fv(translationLocation, translation);
-    yield call(drawArrays, gl, gl.TRIANGLES, 0, 3);
-}
+// export function* _drawTranslate(translation) {
+//     yield call(setUpVertexArrayBuffer, gl, 2, gl.FLOAT, 0, 0, false, positionLocation);
+//     gl.uniform2fv(translationLocation, translation);
+//     yield call(drawArrays, gl, gl.TRIANGLES, 0, 3);
+// }
 
 
 

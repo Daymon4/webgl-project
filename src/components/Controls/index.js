@@ -3,7 +3,10 @@ import component from './component';
 import * as actions from './actions';
 
 const mapDispatchToProps = {
-    initCanvas: actions.initCanvas,
+    rotate: actions.rotate,
+    translate: actions.translate,
+    changeColor: actions.changeColor,
+    startProgram: actions.startProgram,
 };
 
 export default connect(

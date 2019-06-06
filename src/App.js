@@ -5,6 +5,7 @@ import createSagaMiddleware from 'redux-saga';
 import reducers from './reducers';
 import sagas from './sagas';
 import CanvasComponent from './components/CanvasComponent';
+import Sliders from './components/Controls';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(reducers, applyMiddleware(sagaMiddleware),);
@@ -14,6 +15,7 @@ function App() {
   return (
     <Provider store = {store}>
         <CanvasComponent />
+        <Sliders />
     </Provider>
   );
 }
