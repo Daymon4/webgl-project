@@ -181,6 +181,9 @@ module.exports = function(webpackEnv) {
         // This is only used in production mode
         new TerserPlugin({
           terserOptions: {
+            sourceMap: shouldUseSourceMap,
+            // Enable file caching
+            cache: true,
             parse: {
               // we want terser to parse ecma 8 code. However, we don't want it
               // to apply any minfication steps that turns valid ecma 5 code
@@ -219,9 +222,6 @@ module.exports = function(webpackEnv) {
           // Disabled on WSL (Windows Subsystem for Linux) due to an issue with Terser
           // https://github.com/webpack-contrib/terser-webpack-plugin/issues/21
           parallel: !isWsl,
-          // Enable file caching
-          cache: true,
-          sourceMap: shouldUseSourceMap,
         }),
         // This is only used in production mode
         new OptimizeCSSAssetsPlugin({
